@@ -1,0 +1,78 @@
+ 
+
+//MARK: Set Image Picker
+
+func openCamera()
+    {
+        self.isFromSave = false
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            imagePicker.allowsEditing = false
+            
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+        else
+        {
+            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+
+
+
+//MARK: Image Picker Delegate
+
+func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        print("Imagggge")
+        if let img = info[.originalImage] as? UIImage{
+            DispatchQueue.main.async {
+                picker.dismiss(animated: true) {
+                    let sb = ScrapBookViewController.init(nibName: "ScrapBookViewController", bundle: nil)
+                    sb.image = img.fixedOrientation()
+                    sb.intestitialAds = self.intestitialAds
+                    self.navigationController?.pushViewController(sb, animated: true)
+                }
+                
+            }
+        }else{
+            let videoURL = info[UIImagePickerController.InfoKey.mediaURL]as? NSURL
+            
+            DispatchQueue.global(qos: .background).async {
+                if let url = videoURL,
+                   let urlData = NSData(contentsOf: url as URL) {
+                    /*
+                    // MARK: File path of Gallery
+                    // let documentsPath = NSHomeDirectory() + "/Documents/video2.mp4"
+                    // let filePath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+ 
+                    */
+                    //MARK: FIle path of  Document directory
+                    let filePath = NSHomeDirectory() + "/Documents/video2.mp4"
+                    self.removeFileAtURLIfExists(url: NSURL(fileURLWithPath: filePath))
+                    DispatchQueue.main.async {
+                        urlData.write(toFile: filePath, atomically: true)
+                        PHPhotoLibrary.shared().performChanges({
+                            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath))
+                        }) { completed, error in
+                            if completed {
+                                print("Video is saved!")
+                                DispatchQueue.main.async {
+                                    picker.dismiss(animated: true) {
+                                        print("Picker Dissmiss")
+                                        let asset = AVAsset(url: URL(fileURLWithPath: filePath))
+                                        let videoView = VideoViewController(nibName: "VideoViewController", bundle: nil)
+                                        videoView.videoAsset = asset
+                                        videoView.intestitialAds = self.intestitialAds
+                                        self.navigationController?.pushViewController(videoView, animated: true)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }

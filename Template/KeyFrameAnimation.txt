@@ -1,0 +1,43 @@
+//MARK: Won Animation
+    func animation(images: [UIImage]) -> CAKeyframeAnimation? {
+        
+        let animation = CAKeyframeAnimation(keyPath: "contents")
+        
+        var frames = [CGImage]()
+        var delayTimes = [NSNumber]()
+        
+        var totalTime: Float = 0.0
+        
+        for img in images {
+            frames.append(img.cgImage!)
+            let value = 0.02
+            delayTimes.append(NSNumber(value: value))
+            totalTime = totalTime + Float(value)
+            
+        }
+        
+        var times = [Float](repeating: 0, count: 3)
+        var currentTime: Float = 0
+        let count: Int = images.count
+        for i in 0..<count {
+            times.append(Float(NSNumber(value: Float((currentTime / totalTime)))))
+            currentTime += Float(truncating: delayTimes[i])
+        }
+        
+        var images = [AnyHashable](repeating: 0, count: 3)
+        for i in 0..<count {
+            images.append(frames[i])
+        }
+        
+        animation.keyTimes = times as? [NSNumber]
+        animation.values = images
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+        animation.duration = CFTimeInterval(totalTime)
+        animation.repeatCount = Float.infinity
+        
+        animation.beginTime = AVCoreAnimationBeginTimeAtZero
+        animation.isRemovedOnCompletion = false
+        return animation
+        
+    }
+    

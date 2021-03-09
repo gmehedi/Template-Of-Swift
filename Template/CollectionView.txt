@@ -1,0 +1,91 @@
+
+//MARK: Registration nib file and Set Delegate, Datasource
+    fileprivate func registerCollectionViewCell(){
+        let menuNib = UINib(nibName: "MenuCollectionViewCell", bundle: nil)
+        self.menuCollectionView.register(menuNib, forCellWithReuseIdentifier: "MenuCollectionViewCell")
+        
+        let fontNib = UINib(nibName: "FontCollectionViewCell", bundle: nil)
+        self.fontCollectionView.register(fontNib, forCellWithReuseIdentifier: "FontCollectionViewCell")
+        
+        let optionNib = UINib(nibName: "OptionsCollectionViewCell", bundle: nil)
+        self.alignmentCollectionView.register(optionNib, forCellWithReuseIdentifier: "OptionsCollectionViewCell")
+        self.backgroundCollectionView.register(optionNib, forCellWithReuseIdentifier: "OptionsCollectionViewCell")
+        
+        let colorNib = UINib(nibName: "TextStickerColorCollectionViewCell", bundle: nil)
+        self.textColorCollectionView.register(colorNib, forCellWithReuseIdentifier: "TextStickerColorCollectionViewCell")
+        self.bGColorCollectionView.register(colorNib, forCellWithReuseIdentifier: "TextStickerColorCollectionViewCell")
+    }
+    
+    //MARK: Set Collection View Flow Layout
+    fileprivate func setCollectionViewFlowLayout(){
+        
+        if let layoutMenu = self.menuCollectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutMenu.scrollDirection = .horizontal
+            layoutMenu.minimumLineSpacing = 16
+            layoutMenu.minimumInteritemSpacing = 16
+        }
+        self.menuCollectionView.contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        
+        if let layoutFont = self.fontCollectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutFont.scrollDirection = .horizontal
+            layoutFont.minimumLineSpacing = 16
+            layoutFont.minimumInteritemSpacing = 16
+        }
+        self.fontCollectionView.contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        
+        if let layoutAlnmnt = self.alignmentCollectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutAlnmnt.scrollDirection = .horizontal
+            layoutAlnmnt.minimumLineSpacing = 16
+            layoutAlnmnt.minimumInteritemSpacing = 16
+        }
+        self.alignmentCollectionView.contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        
+        if let layoutBG = self.backgroundCollectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutBG.scrollDirection = .horizontal
+            layoutBG.minimumLineSpacing = 16
+            layoutBG.minimumInteritemSpacing = 16
+        }
+        self.backgroundCollectionView.contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        
+        if let layoutText = self.textColorCollectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutText.scrollDirection = .horizontal
+            layoutText.minimumLineSpacing = 16
+            layoutText.minimumInteritemSpacing = 16
+        }
+        self.textColorCollectionView.contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        
+        if let layoutBGColor = self.bGColorCollectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutBGColor.scrollDirection = .horizontal
+            layoutBGColor.minimumLineSpacing = 16
+            layoutBGColor.minimumInteritemSpacing = 16
+        }
+        self.bGColorCollectionView.contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        
+    }
+    
+    //MARK: Set Collection View Delegate
+    fileprivate func setCollectionViewDelegate(){
+        self.menuCollectionView.delegate = self
+        self.menuCollectionView.dataSource = self
+        self.fontCollectionView.delegate = self
+        self.fontCollectionView.dataSource = self
+        self.alignmentCollectionView.delegate = self
+        self.alignmentCollectionView.dataSource = self
+        self.backgroundCollectionView.delegate = self
+        self.backgroundCollectionView.dataSource = self
+        self.textColorCollectionView.delegate = self
+        self.textColorCollectionView.dataSource = self
+        self.bGColorCollectionView.delegate = self
+        self.bGColorCollectionView.dataSource = self
+        // print("Delegate")
+    }
+    
+
+func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        var width = collectionView.bounds.height - 8
+        var height = width
+        
+ 
+        return CGSize(width: width, height: height)
+    }
